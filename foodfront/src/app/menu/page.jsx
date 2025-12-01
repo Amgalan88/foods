@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import FoodsInfo from "../_components/foodsinfo";
 import { API_BASE_URL, getStoredSession, buildAuthHeaders } from "@/lib/api";
@@ -46,16 +46,15 @@ function MenuPageContent() {
   const [orderHistoryError, setOrderHistoryError] = useState("");
 
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (searchParams?.get("order") === "success") {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("order") === "success") {
       setSuccessMessage("Thank you! Your order is on its way.");
-      if (typeof window !== "undefined") {
-        window.history.replaceState(null, "", "/menu");
-      }
+      window.history.replaceState(null, "", "/menu");
     }
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     const loadCategories = async () => {

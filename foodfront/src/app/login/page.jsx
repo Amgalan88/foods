@@ -1,15 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { Suspense, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import LoginPage from "../_components/loginform";
 import { getStoredSession } from "@/lib/api";
 
 function LoginRouteContent() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams?.get("redirect") || "/";
+  const [redirectTo, setRedirectTo] = useState("/");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    setRedirectTo(params.get("redirect") || "/");
+  }, []);
 
   useEffect(() => {
     const session = getStoredSession();
