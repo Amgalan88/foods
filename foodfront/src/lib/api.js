@@ -1,18 +1,20 @@
+const DEFAULT_PROD_API = "https://foodweb-pqsa.onrender.com";
+const LOCAL_API = "http://localhost:8000";
+
 const resolveBaseUrl = () => {
   const envUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   if (envUrl && envUrl.trim().length > 0) {
-    return envUrl;
+    return envUrl.trim();
   }
 
   if (typeof window !== "undefined") {
-    const { protocol, hostname, port } = window.location;
+    const { hostname } = window.location;
     if (hostname === "localhost" || hostname === "127.0.0.1") {
-      return "http://localhost:8000";
+      return LOCAL_API;
     }
-    return `${protocol}//${hostname}${port ? `:${port}` : ""}`;
   }
 
-  return "http://localhost:8000";
+  return DEFAULT_PROD_API;
 };
 
 export const API_BASE_URL = resolveBaseUrl();
