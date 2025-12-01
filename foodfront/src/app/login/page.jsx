@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LoginPage from "../_components/loginform";
 import { getStoredSession } from "@/lib/api";
 
-export default function LoginRoute() {
+function LoginRouteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get("redirect") || "/";
@@ -53,5 +53,19 @@ export default function LoginRoute() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function LoginRoute() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen flex items-center justify-center text-gray-500">
+          Loading...
+        </main>
+      }
+    >
+      <LoginRouteContent />
+    </Suspense>
   );
 }

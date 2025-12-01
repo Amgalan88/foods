@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import FoodsInfo from "../_components/foodsinfo";
@@ -28,7 +28,7 @@ const STATUS_CLASSNAMES = {
   cancelled: "bg-gray-100 text-gray-600 border-gray-200",
 };
 
-export default function MenuPage() {
+function MenuPageContent() {
   const [categories, setCategories] = useState([]);
   const [activeCategoryId, setActiveCategoryId] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -617,5 +617,19 @@ export default function MenuPage() {
         </>
       ) : null}
     </div>
+  );
+}
+
+export default function MenuPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen flex items-center justify-center text-gray-500">
+          Loading menu...
+        </main>
+      }
+    >
+      <MenuPageContent />
+    </Suspense>
   );
 }
